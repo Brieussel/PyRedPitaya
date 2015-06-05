@@ -37,6 +37,7 @@ DISCOVERY_DIR=OS/discovery
 ECOSYSTEM_DIR=Applications/ecosystem
 SDK=sdk
 SDK_DIR=SDK/
+PYTHON_DIR=python
 
 LINUX=$(BUILD)/uImage
 DEVICETREE=$(BUILD)/devicetree.dtb
@@ -52,6 +53,7 @@ MONITOR=$(BUILD)/bin/monitor
 GENERATE=$(BUILD)/bin/generate
 ACQUIRE=$(BUILD)/bin/acquire
 CALIB=$(BUILD)/bin/calib
+PYTHON=$(BUILD)/usr/bin/python
 DISCOVERY=$(BUILD)/sbin/discovery
 ECOSYSTEM=$(BUILD)/www/apps/info/info.json
 SCPI_SERVER=$(BUILD)/bin/scpi-server
@@ -68,7 +70,7 @@ export VERSION
 
 all: zip
 
-$(TARGET): $(BOOT) $(TESTBOOT) $(LINUX) $(DEVICETREE) $(URAMDISK) $(NGINX) $(MONITOR) $(GENERATE) $(ACQUIRE) $(SCPI_SERVER) $(CALIB) $(DISCOVERY) $(ECOSYSTEM)
+$(TARGET): $(BOOT) $(TESTBOOT) $(LINUX) $(DEVICETREE) $(URAMDISK) $(NGINX) $(MONITOR) $(GENERATE) $(ACQUIRE) $(PYTHON) $(SCPI_SERVER) $(CALIB) $(DISCOVERY) $(ECOSYSTEM)
 	mkdir $(TARGET)
 	cp -r $(BUILD)/* $(TARGET)
 	rm -f $(TARGET)/fsbl.elf $(TARGET)/fpga.bit $(TARGET)/u-boot.elf $(TARGET)/devicetree.dts $(TARGET)/memtest.elf
@@ -115,11 +117,15 @@ $(URAMDISK): $(BUILD)
 
 $(NGINX): $(URAMDISK)
 	$(MAKE) -C $(NGINX_DIR) CROSS_COMPILE=arm-xilinx-linux-gnueabi-
-	$(MAKE) -C $(NGINX_DIR) install DESTDIR=$(abspath $(BUILD))
+	$(MAKE) -C $(NGINX_DIR) install DESTDIR=$(abspath $(BUILD)) CROSS_COMPILE=arm-xilinx-linux-gnueabi-
 
 $(MONITOR):
 	$(MAKE) -C $(MONITOR_DIR) CROSS_COMPILE=arm-xilinx-linux-gnueabi-
 	$(MAKE) -C $(MONITOR_DIR) install INSTALL_DIR=$(abspath $(BUILD))
+
+$(PYTHON):
+	make -C $(PYTHON_DIR) all CROSS_COMPILE=arm-xilinx-linux-gnueabi- 
+	make -C $(PYTHON_DIR) install DESTDIR=$(abspath $(BUILD))
 
 $(GENERATE):
 	$(MAKE) -C $(GENERATE_DIR) CROSS_COMPILE=arm-xilinx-linux-gnueabi-
@@ -160,6 +166,7 @@ clean:
 	make -C $(CALIB_DIR) clean
 	make -C $(DISCOVERY_DIR) clean
 	make -C $(SDK_DIR) clean
+	make -C $(PYTHON_DIR) clean
 	rm $(BUILD) -rf
 	rm $(TARGET) -rf
 	$(RM) $(NAME)*.zip

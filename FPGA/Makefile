@@ -35,6 +35,7 @@ $(FPGA_BIT):
 $(FSBL_ELF):
 	make -C $(FPGA_DIR) FPGA_TOOL=$(FPGA_TOOL) sw_package
 
+
 clean:
 	make -C $(FPGA_DIR) FPGA_TOOL=$(FPGA_TOOL) clean
 
@@ -45,6 +46,8 @@ memtest:
 	rm -f `find $(SDK_EXPORT)/fsbl/ -name \*.o`
 	make -C $(FPGA_DIR) FPGA_TOOL=$(FPGA_TOOL) fsbl
 	cp $(FSBL_ELF) $(INSTALL_DIR)/memtest.elf
+	cd $(FPGA_DIR); cat $(THIS_DIR)/patches/*.patch | patch -R -p2
+
 
 install: memtest
 	cp $(FPGA_BIT) $(INSTALL_DIR)/fpga.bit

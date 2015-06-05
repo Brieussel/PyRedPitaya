@@ -7,3 +7,7 @@
 # echo "nameserver <DNS_IP>" > /tmp/resolv.conf
 
 echo "Feel free to add custom initialization commands here."
+
+ln -s /opt/usr/bin/python /usr/bin/python
+ln -s /opt/usr/bin/ipython /usr/bin/ipython
+ln -s /opt/usr/lib/libmonitor.so /usr/lib
