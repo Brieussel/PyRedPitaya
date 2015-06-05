@@ -50,9 +50,13 @@ You need to install the PyRedPitaya package on your PC as well as Rpyc:
     sudo easy_install rpyc
     sudo easy_install PyRedPitaya
 
-On the redpitaya, you have to start the server. Log onto the board using ssh and run : rpyc_server
+On the redpitaya, you have to start the server. Log onto the board using ssh and run : 
 
-On the PC : 
+..code::
+
+    rpyc_server
+
+On the computer (replace REDPITAYA_IP by the string containing the IP address) : 
 
 .. code::
 
