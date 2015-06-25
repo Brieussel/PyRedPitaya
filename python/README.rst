@@ -36,6 +36,8 @@ Logging onto the redpitaya using ssh, one can start the ipython shell and direct
 
     redpitaya = RedPitaya()
 
+    print redpitaya.read(0x40000000) # Direct access
+
     print redpitaya.ams.temp # Read property
     redpitaya.hk.led = 0b10101010 # Write property
 
@@ -47,7 +49,6 @@ You need to install the PyRedPitaya package on your PC as well as Rpyc:
 
 .. code::
 
-    sudo easy_install rpyc
     sudo easy_install PyRedPitaya
 
 On the redpitaya, you have to start the server. Log onto the board using ssh and run : 
