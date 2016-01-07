@@ -224,7 +224,7 @@ class Scope(MemoryInterface):
         x = self.reads(addr, self.data_length)
         y = x.copy()
         y.dtype = np.int32
-        y[y>2**13] -= 2**14
+        y[y>=2**13] -= 2**14
         return y
         
     @property
