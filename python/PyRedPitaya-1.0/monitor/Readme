@@ -1,0 +1,6 @@
+I compiled libmonitor.so in my computer, so if it doesn't work in your computer you may want to delete libmonitor.so
+and type: 
+make
+
+in a terminal. You also need the link in PyRedPitaya/raw_memory.py to link to this library. (libmonitor_file = './monitor/libmonitor.so')
+

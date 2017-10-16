@@ -255,17 +255,20 @@ class Scope(MemoryInterface):
         self.arm_trigger(v=False)
         self.average = True
         self.frequency = frequency
-        self.trigger_source = trigger_source
+#        self.trigger_source = trigger_source
         self.reset_writestate_machine(v=False)
-        self.arm_trigger()
+        self.arm_trigger()  #start the aquisition loop
+        self.trigger_source = trigger_source    #start the trigger
+
     
     def rearm(self,frequency=None,trigger_source = 8):
         if not frequency is None:
             self.frequency = frequency
         self.trigger_delay = self.data_length
-        self.trigger_source = trigger_source
-        self.arm_trigger()
-    
+#        self.trigger_source = trigger_source
+        self.arm_trigger()  #start the aquisition loop
+        self.trigger_source = trigger_source    #start the trigger
+           
     @property
     def frequency(self):
         return 1.0/float(self.data_decimation)/float(self.data_length)/8e-9
@@ -440,7 +443,7 @@ class ASG(MemoryInterface):
         #corresponds to 2Vpp sine
         self.output_zero = True
         self.sm_reset=True
-        self.trig_selector = 0
+        self.trig_selector = 1
         self.scale = 2**13    
         self.offset = 0
         
