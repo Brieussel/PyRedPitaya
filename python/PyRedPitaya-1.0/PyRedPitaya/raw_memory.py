@@ -7,7 +7,7 @@ from time import time
 if 'PyRedPitayaTest' in list(sys.modules.keys()):
     from PyRedPitayaTest import libmonitor_file
 else:
-    libmonitor_file = 'libmonitor.so'
+    libmonitor_file = './monitor/libmonitor.so'
 
 libmonitor = ctypes.cdll.LoadLibrary(libmonitor_file)
 libmonitor.read_value.restype = c_uint32
@@ -46,8 +46,9 @@ class BoardRawMemory(object):
         """Write length words in memory
 
         input : values should be a list, np.array of numbers or a str (interpreted as a string buffer)"""
-        if not isinstance(values, str):
+        if not isinstance(values, bytes):       #I changed (values,str) by (valuues,bytes), I guess it should also be
             values = np.array(values, dtype='uint32')
-            values = str(values.data)
+#            values = str(values.data)                
+            values=bytes(values.data)           #I changed str by bytes or it doensn't want to write
         buf = create_string_buffer(values)
         self.a.write_values(addr, cast(buf, POINTER(ctypes.c_uint32)), len(values)//4)

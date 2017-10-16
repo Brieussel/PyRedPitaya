@@ -21,6 +21,7 @@ class ClientMemory(object):
     def writes(self, addr, values):
         if not isinstance(values, str):
             values = np.array(values, dtype='uint32')
-            values = str(values.data)
+#            values = str(values.data)      #shouldn't the isintance also be bytes???
+            values = bytes(values.data)
         self.remote_interface.writes(addr, values)
 
