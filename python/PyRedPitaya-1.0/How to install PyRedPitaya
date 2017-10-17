@@ -1,0 +1,131 @@
+How to install PyRedpitaya in a redpitaya:
+
+first download from github (https://github.com/Brieussel/PyRedPitaya/tree/master/python)
+the file PyRedPitaya-1.0
+
+go in the file PyRedPitaya-1.0/monitor
+
+and execute the commande make (you need gcc)
+
+to build libmonitor.so which is used to communicate with the register.
+
+
+Then make sure you can connect to your redpitaya:
+Connect your redpitaya to the network (or to the internet box) with an internet cable
+and connect to it with your computer:
+
+
+ssh root@134.31.130.180
+password=root
+
+
+You will have to use the IP adress of your redpitaya (it is written on it)
+
+
+in an other terminal in the file PyRedPitaya-1.0
+
+scp -r *  root@134.31.130.180:/home/test/PyRedPitaya/
+
+to copy all the files to your redpitaya
+
+in the other terminal (connected by ssh to the redpitaya)
+
+sudo apt-get install pip3
+
+pip3 numpy
+pip3 install myhdl
+pip3 install rpyc
+pip3 install cached_property
+
+
+cd /home/test/PyRedPitaya/
+
+python3 setup.py install
+
+
+now the package PyRedPitaya should be installed in /usr/lib/python3.5 (in the redpitaya)
+
+
+
+we can test it:
+
+ipython3
+
+from PyRedPitaya.board import RedPitaya
+
+redpitaya = RedPitaya()
+
+print redpitaya.ams.temp # Read property
+redpitaya.hk.led = 0b10101010 # Write property
+
+
+it should work in any directory of the redpitaya or it means that the installation of PyRedPitaya is not done correctly
+ 
+then you need to start the rpyc link:
+
+
+ python3 /usr/local/bin/rpyc_classic.py
+
+you should obtain something like: INFO:SLAVE/18812:server started on [0.0.0.0]:18812
+
+the number 18812 is the connection port, that you will need to use.
+
+now let this terminal open in the background (or you will close the connection) and
+
+from your computer 
+
+sudo apt-get install pip3 
+
+pip3 numpy
+pip3 install myhdl
+pip3 install rpyc
+pip3 install cached_property
+
+to install all the packaging
+
+go in the folder:
+
+PyRedPitaya-1.0/
+
+
+
+and try:
+
+
+
+ipython3
+
+import rpyc
+
+conn = rpyc.classic.connect("134.31.130.180", port=18812)
+
+from PyRedPitaya.pc import RedPitaya
+
+redpitaya = RedPitaya(conn)
+
+
+redpitaya.hk.led = 0b10101010 # Write property
+print (redpitaya.ams.temp) # Read property
+
+
+from time import sleep
+
+from pylab import *
+
+redpitaya.scope.setup(frequency = 100, trigger_source=1)
+
+sleep(100E-3)
+
+plot(redpitaya.scope.times, redpitaya.scope.data_ch1)
+
+show()
+
+ 
+
+
+you have to use the ip address of your redpitaya and the port open by rpyc
+
+
+
+Hope this will help some people
+
